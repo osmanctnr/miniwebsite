@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MiniWeb - 3 İpucuyla Bul</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="game-container">
+    <div class="top">
+        <span>🎬 3 İpucuyla Bul</span>
+        <span id="score">Skor: 0</span>
+    </div>
+    <div class="progress-bg">
+        <div class="progress" id="progress"></div>
+    </div>
+    <h2 class="clue-title" id="roundTitle">1. Tur</h2>
+    <div class="clue-box">
+        <div class="clue" id="clue1"></div>
+        <div class="clue" id="clue2" style="display:none;"></div>
+        <div class="clue" id="clue3" style="display:none;"></div>
+    </div>
+    <p id="pointsInfo">
+        İlk ipucunda bilirsen: <strong>3 puan</strong>
+    </p>
+    <input
+        type="text"
+        id="answerInput"
+        placeholder="Cevabını yaz..."
+        autocomplete="off"
+    >
+    <button class="guess-btn" onclick="checkAnswer()">
+        Tahmin Et
+    </button>
+    <button
+        class="next-btn"
+        id="nextBtn"
+        onclick="nextRound()"
+        style="display:none;"
+    >
+        Sonraki Tur →
+    </button>
+    <p id="feedback"></p>
+    <div class="result" id="result" style="display:none;">
+        <h2>🏆 Oyun Bitti!</h2>
+        <p class="final-score" id="finalScore"></p>
+        <p class="record" id="record"></p>
+        <button class="restart" onclick="restartGame()">
+            🔄 Tekrar Oyna
+        </button>
+        <a href="index.html" class="home">
+            🏠 Ana Sayfa
+        </a>
+    </div>
+</div>
+<script>
+const rounds = [
+    {
+        answer: "Breaking Bad",
+        clues: [
+            "Bir kimya öğretmeni hayatını tamamen değiştiren bir karar verir.",
+            "Hikâyenin merkezinde uyuşturucu üretimi ve suç dünyası vardır.",
+            "Walter White ve Jesse Pinkman başroldedir."
+        ]
+    },
+    {
+        answer: "Lost",
+        clues: [
+            "Bir uçak kazası birçok insanı gizemli bir adada bırakır.",
+            "Adada açıklanması zor birçok olay yaşanır.",
+            "Jack, Kate ve Sawyer önemli karakterlerdir."
+        ]
+    },
+    {
+        answer: "The Dark Knight",
+        clues: [
+            "Gotham şehrinde geçen karanlık bir süper kahraman hikâyesidir.",
+            "Batman'in karşısındaki en önemli düşmanlardan biri Joker'dir.",
+            "Christian Bale'in Batman'i canlandırdığı üçlemenin ikinci filmidir."
+        ]
+    },
+    {
+        answer: "Stranger Things",
+        clues: [
+            "Bir çocuk ortadan kaybolur ve arkadaşları onu aramaya başlar.",
+            "Hikâyede gizemli bir paralel dünya bulunur.",
+            "Eleven isimli özel güçlere sahip bir kız önemli karakterdir."
+        ]
+    },
+    {
+        answer: "Friends",
+        clues: [
+            "New York'ta yaşayan bir arkadaş grubunun günlük hayatını anlatır.",
+            "Karakterler sık sık bir kafede buluşur.",
+            "Ross, Rachel, Monica, Chandler, Joey ve Phoebe vardır."
+        ]
+    },
+    {
+        answer: "The Matrix",
+        clues: [
+            "Baş karakter yaşadığı dünyanın gerçekliği hakkında şüphe duymaya başlar.",
+            "Hikâyede insanların gerçeklik sandığı şeyin aslında farklı olduğu ortaya çıkar.",
+            "Baş karakterin adı Neo'dur."
+        ]
+    },
+    {
+        answer: "Game of Thrones",
+        clues: [
+            "Birçok krallığın iktidar mücadelesi verdiği fantastik bir dünyada geçer.",
+            "Ejderhalar hikâyede önemli bir yere sahiptir.",
+            "Stark ve Lannister aileleri önemli ailelerdendir."
+        ]
+    },
+    {
+        answer: "Inception",
+        clues: [
+            "Bir grup insan başkalarının zihnine girmeye çalışır.",
+            "Rüyalar hikâyenin merkezindedir.",
+            "Başrolde Leonardo DiCaprio vardır."
+        ]
+    },
+    {
+        answer: "The Office",
+        clues: [
+            "Bir ofiste çalışan insanların günlük hayatını anlatır.",
+            "Belgesel tarzında çekilmiş bir komedi dizisidir.",
+            "Michael Scott isimli müdür önemli karakterdir."
+        ]
+    },
+    {
+        answer: "Interstellar",
+        clues: [
+            "İnsanlığın geleceği için uzay yolculuğu yapılır.",
+            "Hikâyede zaman ve uzay çok önemli bir rol oynar.",
+            "Başrolde Matthew McConaughey vardır."
+        ]
+    }
+];
+let currentRound = 0;
+let score = 0;
+let clueNumber = 1;
+let roundFinished = false;
+const roundTitle = document.getElementById("roundTitle");
+const clue1 = document.getElementById("clue1");
+const clue2 = document.getElementById("clue2");
+const clue3 = document.getElementById("clue3");
+const answerInput = document.getElementById("answerInput");
+const feedback = document.getElementById("feedback");
+const scoreEl = document.getElementById("score");
+const pointsInfo = document.getElementById("pointsInfo");
+const nextBtn = document.getElementById("nextBtn");
+const result = document.getElementById("result");
+const finalScore = document.getElementById("finalScore");
+const record = document.getElementById("record");
+const progress = document.getElementById("progress");
+function loadRound() {
+    const round = rounds[currentRound];
+    clueNumber = 1;
+    roundFinished = false;
+    roundTitle.textContent =
+        `${currentRound + 1}. Tur`;
+    clue1.textContent =
+        "💡 " + round.clues[0];
+    clue2.textContent =
+        "💡 " + round.clues[1];
+    clue3.textContent =
+        "💡 " + round.clues[2];
+    clue1.style.display = "block";
+    clue2.style.display = "none";
+    clue3.style.display = "none";
+    answerInput.value = "";
+    answerInput.disabled = false;
+    feedback.textContent = "";
+    nextBtn.style.display = "none";
+    pointsInfo.innerHTML =
+        "İlk ipucunda bilirsen: <strong>3 puan</strong>";
+    progress.style.width =
+        ((currentRound / rounds.length) * 100) + "%";
+    answerInput.focus();
+}
+function checkAnswer() {
+    if (roundFinished) return;
+    const userAnswer =
+        answerInput.value.trim().toLowerCase();
+    if (!userAnswer) {
+        feedback.textContent =
+            "✏️ Önce bir tahmin yaz!";
+        return;
+    }
+    const correctAnswer =
+        rounds[currentRound].answer.toLowerCase();
+    if (userAnswer === correctAnswer) {
+        let earnedPoints = 4 - clueNumber;
+        score += earnedPoints;
+        scoreEl.textContent =
+            "Skor: " + score;
+        feedback.textContent =
+            `✅ Doğru! +${earnedPoints} puan`;
+        feedback.className = "correct-text";
+        finishRound();
+    } else {
+        if (clueNumber === 1) {
+            clueNumber = 2;
+            clue2.style.display = "block";
+            pointsInfo.innerHTML =
+                "İkinci ipucunda bilirsen: <strong>2 puan</strong>";
+            feedback.textContent =
+                "❌ Olmadı! İkinci ipucunu açtık.";
+        } else if (clueNumber === 2) {
+            clueNumber = 3;
+            clue3.style.display = "block";
+            pointsInfo.innerHTML =
+                "Üçüncü ipucunda bilirsen: <strong>1 puan</strong>";
+            feedback.textContent =
+                "❌ Olmadı! Son ipucunu açtık.";
+        } else {
+            feedback.textContent =
+                "❌ Bu turu bilemedin. Cevap: " +
+                rounds[currentRound].answer;
+            feedback.className = "wrong-text";
+            finishRound();
+        }
+    }
+}
+function finishRound() {
+    roundFinished = true;
+    answerInput.disabled = true;
+    nextBtn.style.display = "block";
+    if (currentRound === rounds.length - 1) {
+        nextBtn.textContent =
+            "🏆 Sonucu Gör";
+    }
+}
+function nextRound() {
+    currentRound++;
+    if (currentRound >= rounds.length) {
+        finishGame();
+    } else {
+        nextBtn.textContent =
+            "Sonraki Tur →";
+        loadRound();
+    }
+}
+function finishGame() {
+    document.querySelector(".clue-box").style.display =
+        "none";
+    roundTitle.style.display = "none";
+    pointsInfo.style.display = "none";
+    answerInput.style.display = "none";
+    document.querySelector(".guess-btn").style.display =
+        "none";
+    nextBtn.style.display = "none";
+    result.style.display = "block";
+    progress.style.width = "100%";
+    finalScore.textContent =
+        `10 turda toplam ${score} puan kazandın!`;
+    let highScore =
+        Number(localStorage.getItem("cluesHighScore")) || 0;
+    if (score > highScore) {
+        localStorage.setItem(
+            "cluesHighScore",
+            score
+        );
+        record.textContent =
+            "🔥 Yeni rekor! Tebrikler!";
+    } else {
+        record.textContent =
+            "🏆 Rekorun: " + highScore;
+    }
+}
+function restartGame() {
+    currentRound = 0;
+    score = 0;
+    roundTitle.style.display = "block";
+    pointsInfo.style.display = "block";
+    answerInput.style.display = "block";
+    document.querySelector(".clue-box").style.display =
+        "block";
+    document.querySelector(".guess-btn").style.display =
+        "block";
+    result.style.display = "none";
+    scoreEl.textContent =
+        "Skor: 0";
+    loadRound();
+}
+answerInput.addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+        checkAnswer();
+    }
+});
+loadRound();
+</script>
+</body>
+</html>

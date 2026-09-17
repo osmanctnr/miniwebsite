@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MiniWeb - Oyunculardan Bul</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="game-container">
+    <div class="top">
+        <span>🎭 Oyunculardan Bul</span>
+        <span id="score">Skor: 0</span>
+    </div>
+    <div class="progress-bg">
+        <div class="progress" id="progress"></div>
+    </div>
+    <h2 class="cast-title" id="roundTitle">1. Tur</h2>
+    <div class="cast-box">
+        <div class="actor">
+            👤 <span id="actor1"></span>
+        </div>
+        <div class="actor">
+            👤 <span id="actor2"></span>
+        </div>
+        <div class="actor">
+            👤 <span id="actor3"></span>
+        </div>
+    </div>
+    <p id="hint">
+        Bu oyuncular hangi film veya dizide birlikte yer aldı?
+    </p>
+    <input
+        type="text"
+        id="answerInput"
+        placeholder="Film veya dizi adını yaz..."
+        autocomplete="off"
+    >
+    <button class="guess-btn" onclick="checkAnswer()">
+        Tahmin Et
+    </button>
+    <p id="feedback"></p>
+    <button
+        class="next-btn"
+        id="nextBtn"
+        onclick="nextRound()"
+        style="display:none;"
+    >
+        Sonraki Tur →
+    </button>
+    <div class="result" id="result" style="display:none;">
+        <h2>🏆 Oyun Bitti!</h2>
+        <p class="final-score" id="finalScore"></p>
+        <p class="record" id="record"></p>
+        <button class="restart" onclick="restartGame()">
+            🔄 Tekrar Oyna
+        </button>
+        <a href="index.html" class="home">
+            🏠 Ana Sayfa
+        </a>
+    </div>
+</div>
+<script>
+const rounds = [
+    {
+        actors: ["Bryan Cranston", "Aaron Paul", "Anna Gunn"],
+        answer: "Breaking Bad"
+    },
+    {
+        actors: ["Jennifer Aniston", "Courteney Cox", "Matt LeBlanc"],
+        answer: "Friends"
+    },
+    {
+        actors: ["Millie Bobby Brown", "Finn Wolfhard", "Gaten Matarazzo"],
+        answer: "Stranger Things"
+    },
+    {
+        actors: ["Kit Harington", "Emilia Clarke", "Peter Dinklage"],
+        answer: "Game of Thrones"
+    },
+    {
+        actors: ["Keanu Reeves", "Laurence Fishburne", "Carrie-Anne Moss"],
+        answer: "The Matrix"
+    },
+    {
+        actors: ["Leonardo DiCaprio", "Joseph Gordon-Levitt", "Ellen Page"],
+        answer: "Inception"
+    },
+    {
+        actors: ["Matthew McConaughey", "Anne Hathaway", "Jessica Chastain"],
+        answer: "Interstellar"
+    },
+    {
+        actors: ["Christian Bale", "Heath Ledger", "Michael Caine"],
+        answer: "The Dark Knight"
+    },
+    {
+        actors: ["Steve Carell", "John Krasinski", "Rainn Wilson"],
+        answer: "The Office"
+    },
+    {
+        actors: ["Tom Hanks", "Tim Allen", "Annie Potts"],
+        answer: "Toy Story"
+    }
+];
+let currentRound = 0;
+let score = 0;
+let roundFinished = false;
+const roundTitle = document.getElementById("roundTitle");
+const actor1 = document.getElementById("actor1");
+const actor2 = document.getElementById("actor2");
+const actor3 = document.getElementById("actor3");
+const answerInput = document.getElementById("answerInput");
+const feedback = document.getElementById("feedback");
+const scoreEl = document.getElementById("score");
+const nextBtn = document.getElementById("nextBtn");
+const result = document.getElementById("result");
+const finalScore = document.getElementById("finalScore");
+const record = document.getElementById("record");
+const progress = document.getElementById("progress");
+const hint = document.getElementById("hint");
+function loadRound() {
+    const round = rounds[currentRound];
+    roundFinished = false;
+    roundTitle.textContent =
+        `${currentRound + 1}. Tur`;
+    actor1.textContent = round.actors[0];
+    actor2.textContent = round.actors[1];
+    actor3.textContent = round.actors[2];
+    answerInput.value = "";
+    answerInput.disabled = false;
+    feedback.textContent = "";
+    feedback.className = "";
+    nextBtn.style.display = "none";
+    progress.style.width =
+        ((currentRound / rounds.length) * 100) + "%";
+    answerInput.focus();
+}
+function normalize(text) {
+    return text
+        .toLowerCase()
+        .replace(/ı/g, "i")
+        .replace(/ğ/g, "g")
+        .replace(/ü/g, "u")
+        .replace(/ş/g, "s")
+        .replace(/ö/g, "o")
+        .replace(/ç/g, "c")
+        .trim();
+}
+function checkAnswer() {
+    if (roundFinished) return;
+    const userAnswer =
+        normalize(answerInput.value);
+    if (!userAnswer) {
+        feedback.textContent =
+            "✏️ Önce bir tahmin yaz!";
+        return;
+    }
+    const correctAnswer =
+        normalize(rounds[currentRound].answer);
+    if (userAnswer === correctAnswer) {
+        score++;
+        scoreEl.textContent =
+            "Skor: " + score;
+        feedback.textContent =
+            "✅ Doğru! +1 puan";
+        feedback.className =
+            "correct-text";
+        finishRound();
+    } else {
+        feedback.textContent =
+            "❌ Yanlış! Tekrar düşün.";
+        feedback.className =
+            "wrong-text";
+    }
+}
+function finishRound() {
+    roundFinished = true;
+    answerInput.disabled = true;
+    nextBtn.style.display = "block";
+    if (currentRound === rounds.length - 1) {
+        nextBtn.textContent =
+            "🏆 Sonucu Gör";
+    }
+}
+function nextRound() {
+    currentRound++;
+    if (currentRound >= rounds.length) {
+        finishGame();
+    } else {
+        nextBtn.textContent =
+            "Sonraki Tur →";
+        loadRound();
+    }
+}
+function finishGame() {
+    document.querySelector(".cast-box").style.display =
+        "none";
+    roundTitle.style.display = "none";
+    hint.style.display = "none";
+    answerInput.style.display = "none";
+    document.querySelector(".guess-btn").style.display =
+        "none";
+    nextBtn.style.display = "none";
+    result.style.display = "block";
+    progress.style.width = "100%";
+    finalScore.textContent =
+        `10 turda ${score} doğru yaptın!`;
+    let highScore =
+        Number(localStorage.getItem("castHighScore")) || 0;
+    if (score > highScore) {
+        localStorage.setItem(
+            "castHighScore",
+            score
+        );
+        record.textContent =
+            "🔥 Yeni rekor! Tebrikler!";
+    } else {
+        record.textContent =
+            "🏆 Rekorun: " + highScore;
+    }
+}
+function restartGame() {
+    currentRound = 0;
+    score = 0;
+    roundTitle.style.display = "block";
+    hint.style.display = "block";
+    answerInput.style.display = "block";
+    document.querySelector(".cast-box").style.display =
+        "block";
+    document.querySelector(".guess-btn").style.display =
+        "block";
+    result.style.display = "none";
+    scoreEl.textContent =
+        "Skor: 0";
+    loadRound();
+}
+answerInput.addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+        checkAnswer();
+    }
+});
+loadRound();
+</script>
+</body>
+</html>

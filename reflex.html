@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0">
+<title>Refleks Testi ⚡</title>
+<link
+    rel="stylesheet"
+    href="style.css">
+<style>
+.reflex-area {
+    text-align: center;
+    margin: 30px 0;
+}
+.reflex-button {
+    width: 100%;
+    min-height: 180px;
+    border-radius: 22px;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(34,211,238,0.10),
+            rgba(139,92,246,0.10)
+        );
+    color: white;
+    border: 1px solid rgba(255,255,255,0.10);
+    font-size: 26px;
+    transition: 0.2s;
+}
+.reflex-button:hover {
+    border-color: rgba(34,211,238,0.45);
+}
+.reflex-button.ready {
+    background: #15803d;
+    color: white;
+    border-color: #22c55e;
+    box-shadow:
+        0 0 35px rgba(34,197,94,0.25);
+}
+.reflex-button.early {
+    background: #b91c1c;
+}
+.time {
+    font-size: 18px;
+    color: #94a3b8;
+    margin-top: 18px;
+}
+.instruction {
+    text-align: center;
+    color: #94a3b8;
+    line-height: 1.5;
+}
+</style>
+</head>
+<body>
+<div class="game-container">
+<div id="game">
+<h1>⚡ Refleks Testi</h1>
+<p class="instruction">
+    Butona bas ve bekle.<br>
+    Ekran yeşile döndüğü anda tekrar tıkla!
+</p>
+<div class="reflex-area">
+    <button
+        id="reflexButton"
+        class="reflex-button"
+        onclick="handleClick()">
+        ⚡ BAŞLAMAK İÇİN TIKLA
+    </button>
+    <div
+        class="time"
+        id="time">
+        En iyi zaman:
+        <span id="bestTime">-</span>
+    </div>
+</div>
+<button
+    class="home"
+    onclick="location.href='index.html'">
+    🏠 Ana Sayfa
+</button>
+</div>
+<!-- SONUÇ -->
+<div
+    id="result"
+    class="result hidden">
+<h1>⚡ Refleks Testi</h1>
+<h2>Sonucun</h2>
+<div
+    class="final-score"
+    id="finalTime">
+    0 ms
+</div>
+<p id="message"></p>
+<p class="record">
+    🏆 En iyi rekorun:
+    <span id="resultBest">
+        -
+    </span>
+</p>
+<button
+    class="restart"
+    onclick="restartGame()">
+    🔄 Tekrar Dene
+</button>
+<button
+    class="home"
+    onclick="location.href='index.html'">
+    🏠 Ana Sayfa
+</button>
+</div>
+</div>
+<script>
+const button =
+    document.getElementById("reflexButton");
+const timeText =
+    document.getElementById("time");
+const bestTimeText =
+    document.getElementById("bestTime");
+let state = "start";
+let startTime = 0;
+let timer = null;
+function getBestTime() {
+    return Number(
+        localStorage.getItem("reflexRecord")
+    ) || 0;
+}
+function updateBestTime() {
+    const best =
+        getBestTime();
+    if (best > 0) {
+        bestTimeText.textContent =
+            best + " ms";
+    } else {
+        bestTimeText.textContent =
+            "-";
+    }
+}
+function handleClick() {
+    if (state === "start") {
+        startWaiting();
+        return;
+    }
+    if (state === "waiting") {
+        clearTimeout(timer);
+        state = "start";
+        button.classList.add("early");
+        button.textContent =
+            "❌ Çok erken!";
+        setTimeout(() => {
+            button.classList.remove("early");
+            button.textContent =
+                "⚡ Tekrar Başlamak İçin Tıkla";
+        }, 1000);
+        return;
+    }
+    if (state === "ready") {
+        const reaction =
+            Math.round(
+                performance.now() - startTime
+            );
+        finishGame(reaction);
+    }
+}
+function startWaiting() {
+    state = "waiting";
+    button.classList.remove("ready");
+    button.textContent =
+        "⏳ HAZIR OL...";
+    timeText.textContent =
+        "Yeşil olmasını bekle...";
+    const delay =
+        Math.floor(
+            Math.random() * 3000
+        ) + 2000;
+    timer = setTimeout(() => {
+        state = "ready";
+        startTime =
+            performance.now();
+        button.classList.add("ready");
+        button.textContent =
+            "⚡ ŞİMDİ TIKLA!";
+        timeText.textContent =
+            "TIKLA!";
+    }, delay);
+}
+function finishGame(reaction) {
+    state = "start";
+    button.classList.remove("ready");
+    button.textContent =
+        "⚡ BAŞLAMAK İÇİN TIKLA";
+    document
+        .getElementById("game")
+        .classList
+        .add("hidden");
+    document
+        .getElementById("result")
+        .classList
+        .remove("hidden");
+    document
+        .getElementById("finalTime")
+        .textContent =
+        reaction + " ms";
+    let best =
+        getBestTime();
+    if (
+        best === 0 ||
+        reaction < best
+    ) {
+        best = reaction;
+        localStorage.setItem(
+            "reflexRecord",
+            best
+        );
+    }
+    document
+        .getElementById("resultBest")
+        .textContent =
+        best + " ms";
+    let message = "";
+    if (reaction < 250) {
+        message =
+            "🔥 İnanılmaz hızlı!";
+    } else if (reaction < 350) {
+        message =
+            "⚡ Çok iyi refleks!";
+    } else if (reaction < 500) {
+        message =
+            "👏 Güzel sonuç!";
+    } else {
+        message =
+            "😄 Bir tur daha dene!";
+    }
+    document
+        .getElementById("message")
+        .textContent =
+        message;
+}
+function restartGame() {
+    clearTimeout(timer);
+    state = "start";
+    document
+        .getElementById("result")
+        .classList
+        .add("hidden");
+    document
+        .getElementById("game")
+        .classList
+        .remove("hidden");
+    button.classList.remove("ready");
+    button.classList.remove("early");
+    button.textContent =
+        "⚡ BAŞLAMAK İÇİN TIKLA";
+    timeText.textContent =
+        "En iyi zaman: " +
+        (
+            getBestTime() > 0
+            ? getBestTime() + " ms"
+            : "-"
+        );
+}
+updateBestTime();
+</script>
+</body>
+</html>
