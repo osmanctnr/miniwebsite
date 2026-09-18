@@ -1,334 +1,150 @@
 <!DOCTYPE html>
 <html lang="tr">
-
 <head>
-
-<meta charset="UTF-8">
-
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0">
-
-<title>MiniWeb 🚀</title>
-
-<link
-    rel="stylesheet"
-    href="style.css">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Burasi Quizdir 🎮</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-
 
 <body>
 
-
 <div class="container">
 
+    <header>
+        <h1>Burasi Quizdir 🎮</h1>
+        <p>🎮 Eğlen • 🧠 Öğren • 🏆 Rekorunu Kır</p>
+    </header>
 
-<header>
+    <div class="stats">
 
-    <h1>MiniWeb 🚀</h1>
-
-    <p>
-        🎮 Eğlen • 🧠 Öğren • 🏆 Yarış
-    </p>
-
-</header>
-
-
-<div class="stats">
-
-
-    <div class="stat">
-
-        <div class="stat-title">
-            🧠 Genel Kültür Rekoru
+        <div class="stat">
+            <div class="stat-title">🧠 Genel Kültür Rekoru</div>
+            <div class="stat-value" id="quizRecord">-</div>
         </div>
 
-        <div
-            class="stat-value"
-            id="quizRecord">
+        <div class="stat">
+            <div class="stat-title">🎯 Sayı Tahmin Rekoru</div>
+            <div class="stat-value" id="guessRecord">-</div>
+        </div>
 
-            -
-
+        <div class="stat">
+            <div class="stat-title">⚡ Refleks Rekoru</div>
+            <div class="stat-value" id="reflexRecord">-</div>
         </div>
 
     </div>
 
+    <h2 class="section-title">🎮 Oyunlar</h2>
 
-    <div class="stat">
+    <div class="games">
 
-        <div class="stat-title">
-            🎯 Sayı Tahmin Rekoru
+        <!-- GENEL KÜLTÜR -->
+        <div class="card" onclick="location.href='quiz.html'">
+            <div class="icon">🧠</div>
+            <h2>Genel Kültür Quiz</h2>
+            <p>Farklı konulardaki soruları cevapla, bilgini test et ve rekorunu kır.</p>
+            <span>Oyna →</span>
         </div>
 
-        <div
-            class="stat-value"
-            id="guessRecord">
+        <!-- SAYI TAHMİN -->
+        <div class="card" onclick="location.href='game.html'">
+            <div class="icon">🎯</div>
+            <h2>Sayı Tahmin</h2>
+            <p>1 ile 100 arasındaki gizli sayıyı en az denemede bulmaya çalış.</p>
+            <span>Oyna →</span>
+        </div>
 
-            -
+        <!-- İNGİLİZCE -->
+        <div class="card" onclick="location.href='english.html'">
+            <div class="icon">🇬🇧</div>
+            <h2>İngilizce Kelime</h2>
+            <p>Kolay, orta ve zor seviyelerde İngilizce kelime bilgini test et.</p>
+            <span>Oyna →</span>
+        </div>
 
+        <!-- REFLEKS -->
+        <div class="card" onclick="location.href='reflex.html'">
+            <div class="icon">⚡</div>
+            <h2>Refleks Testi</h2>
+            <p>Ekran değiştiği anda tıkla ve tepki süreni ölç.</p>
+            <span>Oyna →</span>
+        </div>
+
+        <!-- FUTBOL QUIZ -->
+        <div class="card" onclick="location.href='football.html'">
+            <div class="icon">⚽</div>
+            <h2>Futbol Quiz</h2>
+            <p>Orta-zor futbol sorularıyla futbol bilgini test et.</p>
+            <span>Oyna →</span>
+        </div>
+
+        <!-- 3 İPUCU -->
+        <div class="card" onclick="location.href='clues.html'">
+            <div class="icon">🎬</div>
+            <h2>3 İpucuyla Bul</h2>
+            <p>Dizi veya filmi mümkün olan en az ipucuyla tahmin et.</p>
+            <span>Oyna →</span>
+        </div>
+
+        <!-- OYUNCU KADROSU -->
+        <div class="card" onclick="location.href='cast.html'">
+            <div class="icon">🎭</div>
+            <h2>Oyuncu Kadrosundan Bul</h2>
+            <p>Oyunculara bak ve hangi film veya diziden olduklarını tahmin et.</p>
+            <span>Oyna →</span>
+        </div>
+
+        <!-- PİKSELDEN FUTBOLCU -->
+        <div class="card" onclick="location.href='pixel-football.html'">
+            <div class="icon">🧩</div>
+            <h2>Pikselden Futbolcuyu Bil</h2>
+            <p>Pikselli fotoğraftan futbolcuyu tahmin et. İpuçlarını aç ve doğru cevabı bul.</p>
+            <span>Oyna →</span>
+        </div>
+
+        <!-- FUTBOLCU BİLMECE -->
+        <div class="card" onclick="location.href='football-riddle.html'">
+            <div class="icon">🕵️</div>
+            <h2>Futbolcu Bilmece</h2>
+            <p>Verilen ipuçlarını kullanarak gizli futbolcuyu bul. Erken bilirsen daha çok puan kazan!</p>
+            <span>Oyna →</span>
         </div>
 
     </div>
 
-
-    <div class="stat">
-
-        <div class="stat-title">
-            ⚡ Refleks Rekoru
-        </div>
-
-        <div
-            class="stat-value"
-            id="reflexRecord">
-
-            -
-
-        </div>
-
+    <div class="coming">
+        🚀 Yeni oyunlar ve özellikler yakında!
     </div>
 
+    <footer>
+        Burasi Quizdir © 2026
+    </footer>
 
 </div>
-
-
-<h2 class="section-title">
-    🎮 Oyunlar
-</h2>
-
-
-<div class="games">
-
-
-    <div
-        class="card"
-        onclick="location.href='quiz.html'">
-
-        <div class="icon">
-            🧠
-        </div>
-
-        <h2>
-            Genel Kültür Quiz
-        </h2>
-
-        <p>
-            Farklı konulardaki soruları cevapla,
-            bilgini test et ve rekorunu kır.
-        </p>
-
-        <span>
-            Oyna →
-        </span>
-
-    </div>
-
-
-    <div
-        class="card"
-        onclick="location.href='game.html'">
-
-        <div class="icon">
-            🎯
-        </div>
-
-        <h2>
-            Sayı Tahmin
-        </h2>
-
-        <p>
-            1 ile 100 arasındaki gizli sayıyı
-            en az denemede bulmaya çalış.
-        </p>
-
-        <span>
-            Oyna →
-        </span>
-
-    </div>
-
-
-    <div
-        class="card"
-        onclick="location.href='english.html'">
-
-        <div class="icon">
-            🇬🇧
-        </div>
-
-        <h2>
-            İngilizce Kelime
-        </h2>
-
-        <p>
-            Kolay, orta ve zor seviyelerde
-            İngilizce kelime bilgini test et.
-        </p>
-
-        <span>
-            Oyna →
-        </span>
-
-    </div>
-
-
-    <div
-        class="card"
-        onclick="location.href='reflex.html'">
-
-        <div class="icon">
-            ⚡
-        </div>
-
-        <h2>
-            Refleks Testi
-        </h2>
-
-        <p>
-            Ekran değiştiği anda tıkla.
-            Tepki süreni ölç.
-        </p>
-
-        <span>
-            Oyna →
-        </span>
-
-    </div>
-
-
-    <div
-        class="card"
-        onclick="location.href='football.html'">
-
-        <div class="icon">
-            ⚽
-        </div>
-
-        <h2>
-            Futbol Quiz
-        </h2>
-
-        <p>
-            Orta-zor futbol sorularıyla
-            bilgini test et.
-        </p>
-
-        <span>
-            Oyna →
-        </span>
-
-    </div>
-
-
-    <div
-        class="card"
-        onclick="location.href='clues.html'">
-
-        <div class="icon">
-            🎬
-        </div>
-
-        <h2>
-            3 İpucuyla Bul
-        </h2>
-
-        <p>
-            Diziyi veya filmi mümkün olan
-            en az ipucuyla tahmin et.
-        </p>
-
-        <span>
-            Oyna →
-        </span>
-
-    </div>
-
-
-    <div
-        class="card"
-        onclick="location.href='cast.html'">
-
-        <div class="icon">
-            🎭
-        </div>
-
-        <h2>
-            Oyuncu Kadrosundan Bul
-        </h2>
-
-        <p>
-            Oyunculara bak ve hangi film veya
-            diziden olduklarını tahmin et.
-        </p>
-
-        <span>
-            Oyna →
-        </span>
-
-    </div>
-
-
-</div>
-
-
-<div class="coming">
-
-    🚀 Yeni oyunlar ve özellikler yakında!
-
-</div>
-
-
-<footer>
-
-    MiniWeb © 2026
-
-</footer>
-
-
-</div>
-
 
 <script>
 
-const quizRecord =
-    localStorage.getItem("quizHighScore");
-
-const guessRecord =
-    localStorage.getItem("guessRecord");
-
-const reflexRecord =
-    localStorage.getItem("reflexRecord");
-
+const quizRecord = localStorage.getItem("quizHighScore");
+const guessRecord = localStorage.getItem("guessRecord");
+const reflexRecord = localStorage.getItem("reflexRecord");
 
 if (quizRecord !== null) {
-
-    document.getElementById("quizRecord")
-        .textContent =
+    document.getElementById("quizRecord").textContent =
         quizRecord + " / 10";
-
 }
-
 
 if (guessRecord !== null) {
-
-    document.getElementById("guessRecord")
-        .textContent =
+    document.getElementById("guessRecord").textContent =
         guessRecord + " deneme";
-
 }
 
-
 if (reflexRecord !== null) {
-
-    document.getElementById("reflexRecord")
-        .textContent =
+    document.getElementById("reflexRecord").textContent =
         reflexRecord + " ms";
-
 }
 
 </script>
 
-
 </body>
-
 </html>

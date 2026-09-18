@@ -1,553 +1,109 @@
+```html
 <!DOCTYPE html>
 <html lang="tr">
 
 <head>
-
-<meta charset="UTF-8">
-
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0">
-
-<title>Genel Kültür Quiz 🧠</title>
-
-<link rel="stylesheet" href="style.css">
-
-</head>
-
-
-<body>
-
-
-<div class="game-container">
-
-
-<div id="quiz">
-
-
-<h1>🧠 Genel Kültür Quiz</h1>
-
-
-<div class="top">
-
-    <span id="questionNumber">
-        Soru 1 / 10
-    </span>
-
-    <span id="scoreText">
-        Skor: 0
-    </span>
-
-</div>
-
-
-<div class="progress-bg">
-
-    <div
-        class="progress"
-        id="progress">
-    </div>
-
-</div>
-
-
-<div id="question"></div>
-
-
-<div
-    class="answers"
-    id="answers">
-</div>
-
-
-<div id="feedback"></div>
-
-
-<button
-    id="nextBtn"
-    class="next-btn hidden"
-    onclick="nextQuestion()">
-
-    Sonraki Soru →
-
-</button>
-
-
-</div>
-
-
-<!-- SONUÇ -->
-
-<div
-    id="result"
-    class="result hidden">
-
-
-<h1>🧠 Genel Kültür Quiz</h1>
-
-<h2>Quiz Bitti!</h2>
-
-
-<div
-    class="final-score"
-    id="finalScore">
-
-    0 / 10
-
-</div>
-
-
-<p id="message"></p>
-
-
-<p class="record">
-
-    🏆 En yüksek skorun:
-    <span id="highScore">0</span> / 10
-
-</p>
-
-
-<button
-    class="restart"
-    onclick="restartQuiz()">
-
-    🔄 Tekrar Oyna
-
-</button>
-
-
-<button
-    class="home"
-    onclick="location.href='index.html'">
-
-    🏠 Ana Sayfa
-
-</button>
-
-
-</div>
-
-
-</div>
-
-
-<script>
-
-
-const questions = [
-
-    {
-        question: "Dünyanın en büyük okyanusu hangisidir?",
-        answers: [
-            "Atlas Okyanusu",
-            "Hint Okyanusu",
-            "Pasifik Okyanusu",
-            "Arktik Okyanusu"
-        ],
-        correct: "Pasifik Okyanusu"
-    },
-
-    {
-        question: "İnsan vücudundaki en büyük organ hangisidir?",
-        answers: [
-            "Kalp",
-            "Akciğer",
-            "Karaciğer",
-            "Deri"
-        ],
-        correct: "Deri"
-    },
-
-    {
-        question: "Birleşmiş Milletler'in merkezi hangi şehirdedir?",
-        answers: [
-            "Londra",
-            "New York",
-            "Paris",
-            "Cenevre"
-        ],
-        correct: "New York"
-    },
-
-    {
-        question: "Güneş Sistemi'ndeki en büyük gezegen hangisidir?",
-        answers: [
-            "Dünya",
-            "Satürn",
-            "Jüpiter",
-            "Neptün"
-        ],
-        correct: "Jüpiter"
-    },
-
-    {
-        question: "Mona Lisa tablosunun ressamı kimdir?",
-        answers: [
-            "Vincent van Gogh",
-            "Pablo Picasso",
-            "Leonardo da Vinci",
-            "Claude Monet"
-        ],
-        correct: "Leonardo da Vinci"
-    },
-
-    {
-        question: "Dünyanın en yüksek dağı hangisidir?",
-        answers: [
-            "K2",
-            "Everest",
-            "Kilimanjaro",
-            "Mont Blanc"
-        ],
-        correct: "Everest"
-    },
-
-    {
-        question: "DNA'nın açılımında bulunan 'N' harfi neyi ifade eder?",
-        answers: [
-            "Nükleik",
-            "Nitrojen",
-            "Nöro",
-            "Nöron"
-        ],
-        correct: "Nükleik"
-    },
-
-    {
-        question: "Rönesans'ın başladığı ülke hangisidir?",
-        answers: [
-            "Fransa",
-            "İtalya",
-            "İspanya",
-            "Almanya"
-        ],
-        correct: "İtalya"
-    },
-
-    {
-        question: "Satürn'ün en belirgin özelliği nedir?",
-        answers: [
-            "Çok sıcak olması",
-            "Halkalarının bulunması",
-            "En küçük gezegen olması",
-            "Dünya'ya en yakın gezegen olması"
-        ],
-        correct: "Halkalarının bulunması"
-    },
-
-    {
-        question: "Suyun kimyasal formülü nedir?",
-        answers: [
-            "CO2",
-            "O2",
-            "H2O",
-            "NaCl"
-        ],
-        correct: "H2O"
-    }
-
-];
-
-
-let currentQuestion = 0;
-
-let score = 0;
-
-let answered = false;
-
-
-function loadQuestion() {
-
-
-    answered = false;
-
-
-    document
-        .getElementById("nextBtn")
-        .classList
-        .add("hidden");
-
-
-    document
-        .getElementById("feedback")
-        .textContent = "";
-
-
-    const q =
-        questions[currentQuestion];
-
-
-    document
-        .getElementById("questionNumber")
-        .textContent =
-        `Soru ${currentQuestion + 1} / ${questions.length}`;
-
-
-    document
-        .getElementById("scoreText")
-        .textContent =
-        `Skor: ${score}`;
-
-
-    document
-        .getElementById("progress")
-        .style.width =
-        `${(currentQuestion / questions.length) * 100}%`;
-
-
-    document
-        .getElementById("question")
-        .textContent =
-        q.question;
-
-
-    const answers =
-        document.getElementById("answers");
-
-
-    answers.innerHTML = "";
-
-
-    q.answers.forEach(answer => {
-
-
-        const button =
-            document.createElement("button");
-
-
-        button.textContent =
-            answer;
-
-
-        button.classList.add("answer");
-
-
-        button.onclick =
-            () => checkAnswer(button, answer);
-
-
-        answers.appendChild(button);
-
-
-    });
-
-}
-
-
-function checkAnswer(button, answer) {
-
-
-    if (answered) return;
-
-
-    answered = true;
-
-
-    const correctAnswer =
-        questions[currentQuestion].correct;
-
-
-    const buttons =
-        document.querySelectorAll(".answer");
-
-
-    buttons.forEach(btn => {
-
-
-        if (
-            btn.textContent === correctAnswer
-        ) {
-
-            btn.classList.add("correct");
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Genel Kültür Quiz 🧠</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+
+        .quiz-box {
+            max-width: 750px;
+            margin: 40px auto;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 22px;
+            padding: 35px;
+            backdrop-filter: blur(10px);
         }
 
-    });
-
-
-    if (answer === correctAnswer) {
-
-
-        score++;
-
-
-        button.classList.add("correct");
-
-
-        document
-            .getElementById("feedback")
-            .textContent =
-            "✅ Doğru!";
-
-
-    } else {
-
-
-        button.classList.add("wrong");
-
-
-        document
-            .getElementById("feedback")
-            .textContent =
-            `❌ Yanlış! Doğru cevap: ${correctAnswer}`;
-
-    }
-
-
-    document
-        .getElementById("scoreText")
-        .textContent =
-        `Skor: ${score}`;
-
-
-    document
-        .getElementById("nextBtn")
-        .classList
-        .remove("hidden");
-
-}
-
-
-function nextQuestion() {
-
-
-    currentQuestion++;
-
-
-    if (
-        currentQuestion >= questions.length
-    ) {
-
-        showResult();
-
-    } else {
-
-        loadQuestion();
-
-    }
-
-}
-
-
-function showResult() {
-
-
-    document
-        .getElementById("quiz")
-        .classList
-        .add("hidden");
-
-
-    document
-        .getElementById("result")
-        .classList
-        .remove("hidden");
-
-
-    document
-        .getElementById("finalScore")
-        .textContent =
-        `${score} / ${questions.length}`;
-
-
-    let message = "";
-
-
-    if (score === 10) {
-
-        message =
-            "🔥 Mükemmel! Hepsini bildin!";
-
-    } else if (score >= 8) {
-
-        message =
-            "🏆 Çok iyi! Genel kültürün sağlam.";
-
-    } else if (score >= 6) {
-
-        message =
-            "👏 Güzel skor!";
-
-    } else if (score >= 4) {
-
-        message =
-            "🙂 Fena değil! Bir tur daha deneyebilirsin.";
-
-    } else {
-
-        message =
-            "😄 Bir tur daha dene!";
-
-    }
-
-
-    document
-        .getElementById("message")
-        .textContent =
-        message;
-
-
-    let highScore =
-        Number(
-            localStorage.getItem(
-                "quizHighScore"
-            )
-        ) || 0;
-
-
-    if (score > highScore) {
-
-
-        highScore = score;
-
-
-        localStorage.setItem(
-            "quizHighScore",
-            highScore
-        );
-
-    }
-
-
-    document
-        .getElementById("highScore")
-        .textContent =
-        highScore;
-
-}
-
-
-function restartQuiz() {
-
-
-    currentQuestion = 0;
-
-    score = 0;
-
-
-    document
-        .getElementById("result")
-        .classList
-        .add("hidden");
-
-
-    document
-        .getElementById("quiz")
-        .classList
-        .remove("hidden");
-
-
-    loadQuestion();
-
-}
-
-
-loadQuestion();
-
-</script>
-
-
-</body>
-
-</html>
+        .quiz-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            color: #cbd5e1;
+        }
+
+        .progress {
+            width: 100%;
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: white;
+            transition: 0.3s;
+        }
+
+        #question {
+            font-size: 26px;
+            line-height: 1.4;
+            margin-bottom: 25px;
+        }
+
+        .answers {
+            display: grid;
+            gap: 14px;
+        }
+
+        .answer {
+            padding: 17px;
+            border-radius: 13px;
+            border: 1px solid rgba(255,255,255,0.15);
+            background: rgba(255,255,255,0.06);
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            text-align: left;
+            transition: 0.2s;
+        }
+
+        .answer:hover {
+            background: rgba(255,255,255,0.14);
+            transform: translateX(4px);
+        }
+
+        .answer.correct {
+            background: rgba(34,197,94,0.35);
+            border-color: #22c55e;
+        }
+
+        .answer.wrong {
+            background: rgba(239,68,68,0.35);
+            border-color: #ef4444;
+        }
+
+        #nextBtn,
+        #restartBtn,
+        #homeBtn {
+            margin-top: 25px;
+            padding: 13px 22px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 15px;
+        }
+
+        #nextBtn {
+            display: none;
+        }
+
+        #result {
+            display: none;
+            text-align: center;
+        }
+
+        #result h2
+```

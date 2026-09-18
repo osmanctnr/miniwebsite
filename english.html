@@ -1,660 +1,422 @@
+```html
 <!DOCTYPE html>
 <html lang="tr">
+
 <head>
-<meta charset="UTF-8">
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0">
-<title>İngilizce Kelime 🇬🇧</title>
-<link
-    rel="stylesheet"
-    href="style.css">
-<style>
-.level-select {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    margin: 25px 0;
-}
-.level-btn {
-    background: rgba(255,255,255,0.06);
-    color: white;
-    border: 1px solid rgba(255,255,255,0.08);
-}
-.level-btn:hover {
-    border-color: #22d3ee;
-    background: rgba(34,211,238,0.10);
-}
-.level-btn.active {
-    background: linear-gradient(
-        90deg,
-        #22d3ee,
-        #60a5fa
-    );
-    color: #031018;
-}
-.word-box {
-    text-align: center;
-    padding: 30px 20px;
-    margin-bottom: 25px;
-    border-radius: 20px;
-    background: rgba(255,255,255,0.045);
-    border: 1px solid rgba(255,255,255,0.08);
-}
-.word {
-    font-size: 38px;
-    font-weight: 800;
-    color: #22d3ee;
-}
-.word-info {
-    color: #94a3b8;
-    margin-top: 8px;
-}
-@media (max-width: 600px) {
-    .level-select {
-        grid-template-columns: 1fr;
-    }
-    .word {
-        font-size: 32px;
-    }
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>İngilizce Kelime 🇬🇧</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .game-box {
+            max-width: 700px;
+            margin: 40px auto;
+            padding: 35px;
+            text-align: center;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 22px;
+            backdrop-filter: blur(10px);
+        }
+
+        .levels {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 25px 0;
+        }
+
+        .level-btn,
+        .main-btn {
+            padding: 13px 18px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .level-btn {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+
+        .level-btn.active {
+            background: white;
+            color: #0f172a;
+        }
+
+        .progress {
+            color: #cbd5e1;
+            margin-bottom: 20px;
+        }
+
+        .word {
+            font-size: 48px;
+            font-weight: bold;
+            margin: 30px 0;
+        }
+
+        .question {
+            color: #cbd5e1;
+            margin-bottom: 20px;
+        }
+
+        #answerInput {
+            width: 100%;
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(0,0,0,0.2);
+            color: white;
+            font-size: 18px;
+            text-align: center;
+            outline: none;
+        }
+
+        #answerInput:focus {
+            border-color: white;
+        }
+
+        .main-btn {
+            margin-top: 15px;
+            width: 100%;
+            background: white;
+            color: #0f172a;
+            font-size: 15px;
+        }
+
+        #feedback {
+            min-height: 30px;
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        #nextBtn {
+            display: none;
+        }
+
+        .score {
+            margin-top: 20px;
+            color: #cbd5e1;
+        }
+
+        .remaining {
+            margin-top: 15px;
+            color: #94a3b8;
+            font-size: 14px;
+        }
+
+        #result {
+            display: none;
+        }
+
+        #finalScore {
+            font-size: 50px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+    </style>
 </head>
+
 <body>
-<div class="game-container">
-<!-- SEVİYE SEÇİMİ -->
-<div id="levelScreen">
-    <h1>🇬🇧 İngilizce Kelime</h1>
-    <p
-        style="
-        text-align:center;
-        color:#94a3b8;
-        line-height:1.5;
-        ">
-        Seviyeni seç ve kelime bilgini test et!
-    </p>
-    <div class="level-select">
-        <button
-            class="level-btn"
-            onclick="setLevel('easy', this)">
-            🟢 Kolay
-        </button>
-        <button
-            class="level-btn"
-            onclick="setLevel('medium', this)">
-            🟡 Orta
-        </button>
-        <button
-            class="level-btn"
-            onclick="setLevel('hard', this)">
-            🔴 Zor
-        </button>
+
+<div class="container">
+
+    <header>
+        <h1>🇬🇧 İngilizce Kelime</h1>
+        <p>Her turda yeni kelimelerle kendini test et!</p>
+    </header>
+
+    <div class="game-box">
+
+        <div id="gameArea">
+
+            <h2>Seviye Seç</h2>
+
+            <div class="levels">
+
+                <button class="level-btn active" data-level="easy">
+                    🟢 Kolay
+                </button>
+
+                <button class="level-btn" data-level="medium">
+                    🟡 Orta
+                </button>
+
+                <button class="level-btn" data-level="hard">
+                    🔴 Zor
+                </button>
+
+            </div>
+
+            <div class="progress" id="progress">
+                Soru 1 / 10
+            </div>
+
+            <div class="question">
+                Bu kelimenin Türkçe anlamı nedir?
+            </div>
+
+            <div class="word" id="word">
+                -
+            </div>
+
+            <form id="answerForm">
+
+                <input
+                    id="answerInput"
+                    type="text"
+                    placeholder="Türkçe anlamını yaz..."
+                    autocomplete="off"
+                    required>
+
+                <button
+                    class="main-btn"
+                    type="submit">
+                    Cevapla
+                </button>
+
+            </form>
+
+            <div id="feedback"></div>
+
+            <button
+                class="main-btn"
+                id="nextBtn"
+                type="button">
+                Sonraki Kelime →
+            </button>
+
+            <div class="score">
+                Puan: <span id="score">0</span>
+            </div>
+
+            <div class="remaining" id="remaining"></div>
+
+        </div>
+
+
+        <div id="result">
+
+            <h2>🎉 Tur Bitti!</h2>
+
+            <div id="finalScore">
+                0 / 10
+            </div>
+
+            <p id="finalMessage"></p>
+
+            <button
+                class="main-btn"
+                id="restartBtn"
+                type="button">
+                🔄 Yeni Tur
+            </button>
+
+            <button
+                class="main-btn"
+                type="button"
+                onclick="location.href='index.html'">
+                🏠 Ana Sayfa
+            </button>
+
+        </div>
+
     </div>
-    <button
-        class="home"
-        onclick="location.href='index.html'">
-        🏠 Ana Sayfa
-    </button>
+
 </div>
-<!-- OYUN -->
-<div
-    id="quiz"
-    class="hidden">
-<h1>🇬🇧 İngilizce Kelime</h1>
-<div class="top">
-    <span id="questionNumber">
-        Soru 1 / 10
-    </span>
-    <span id="scoreText">
-        Skor: 0
-    </span>
-</div>
-<div class="progress-bg">
-    <div
-        class="progress"
-        id="progress">
-    </div>
-</div>
-<div class="word-box">
-    <div
-        class="word"
-        id="word">
-    </div>
-    <div class="word-info">
-        Türkçe anlamını seç
-    </div>
-</div>
-<div
-    class="answers"
-    id="answers">
-</div>
-<div id="feedback"></div>
-<button
-    id="nextBtn"
-    class="next-btn hidden"
-    onclick="nextQuestion()">
-    Sonraki Soru →
-</button>
-</div>
-<!-- SONUÇ -->
-<div
-    id="result"
-    class="result hidden">
-<h1>🇬🇧 Quiz Bitti!</h1>
-<div
-    class="final-score"
-    id="finalScore">
-    0 / 10
-</div>
-<p id="message"></p>
-<p class="record">
-    🏆 En yüksek skorun:
-    <span id="highScore">
-        0
-    </span>
-    / 10
-</p>
-<button
-    class="restart"
-    onclick="restartQuiz()">
-    🔄 Tekrar Oyna
-</button>
-<button
-    class="home"
-    onclick="location.href='index.html'">
-    🏠 Ana Sayfa
-</button>
-</div>
-</div>
+
+
+<!-- ÖNCE VERİ DOSYASI -->
+
+<script src="data.js"></script>
+
+
+<!-- SONRA OYUN KODU -->
+
 <script>
-const words = {
-    easy: [
-        {
-            word: "Apple",
-            answers: [
-                "Elma",
-                "Masa",
-                "Kapı",
-                "Kalem"
-            ],
-            correct: "Elma"
-        },
-        {
-            word: "House",
-            answers: [
-                "Araba",
-                "Ev",
-                "Okul",
-                "Bahçe"
-            ],
-            correct: "Ev"
-        },
-        {
-            word: "Water",
-            answers: [
-                "Su",
-                "Ateş",
-                "Hava",
-                "Toprak"
-            ],
-            correct: "Su"
-        },
-        {
-            word: "Book",
-            answers: [
-                "Kitap",
-                "Defter",
-                "Telefon",
-                "Çanta"
-            ],
-            correct: "Kitap"
-        },
-        {
-            word: "Friend",
-            answers: [
-                "Öğretmen",
-                "Arkadaş",
-                "Komşu",
-                "Doktor"
-            ],
-            correct: "Arkadaş"
-        },
-        {
-            word: "Morning",
-            answers: [
-                "Akşam",
-                "Gece",
-                "Sabah",
-                "Öğle"
-            ],
-            correct: "Sabah"
-        },
-        {
-            word: "Happy",
-            answers: [
-                "Üzgün",
-                "Mutlu",
-                "Kızgın",
-                "Yorgun"
-            ],
-            correct: "Mutlu"
-        },
-        {
-            word: "Fast",
-            answers: [
-                "Yavaş",
-                "Büyük",
-                "Hızlı",
-                "Küçük"
-            ],
-            correct: "Hızlı"
-        },
-        {
-            word: "School",
-            answers: [
-                "Hastane",
-                "Ev",
-                "Okul",
-                "Market"
-            ],
-            correct: "Okul"
-        },
-        {
-            word: "Beautiful",
-            answers: [
-                "Güzel",
-                "Çirkin",
-                "Soğuk",
-                "Eski"
-            ],
-            correct: "Güzel"
-        }
-    ],
-    medium: [
-        {
-            word: "Improve",
-            answers: [
-                "Geliştirmek",
-                "Kaybetmek",
-                "Unutmak",
-                "Beklemek"
-            ],
-            correct: "Geliştirmek"
-        },
-        {
-            word: "Reliable",
-            answers: [
-                "Tehlikeli",
-                "Güvenilir",
-                "Pahalı",
-                "Gürültülü"
-            ],
-            correct: "Güvenilir"
-        },
-        {
-            word: "Although",
-            answers: [
-                "Çünkü",
-                "Eğer",
-                "Rağmen",
-                "Sonra"
-            ],
-            correct: "Rağmen"
-        },
-        {
-            word: "Achievement",
-            answers: [
-                "Başarı",
-                "Başlangıç",
-                "Hata",
-                "Karar"
-            ],
-            correct: "Başarı"
-        },
-        {
-            word: "Environment",
-            answers: [
-                "Çevre",
-                "Hükümet",
-                "Ekonomi",
-                "Toplum"
-            ],
-            correct: "Çevre"
-        },
-        {
-            word: "Eventually",
-            answers: [
-                "Aniden",
-                "Sonunda",
-                "Nadiren",
-                "Asla"
-            ],
-            correct: "Sonunda"
-        },
-        {
-            word: "Require",
-            answers: [
-                "Reddetmek",
-                "Gerektirmek",
-                "Övmek",
-                "Taşımak"
-            ],
-            correct: "Gerektirmek"
-        },
-        {
-            word: "Accurate",
-            answers: [
-                "Doğru",
-                "Gizli",
-                "Zor",
-                "Yavaş"
-            ],
-            correct: "Doğru"
-        },
-        {
-            word: "Concern",
-            answers: [
-                "Endişe",
-                "Ödül",
-                "Fırsat",
-                "Tavsiye"
-            ],
-            correct: "Endişe"
-        },
-        {
-            word: "Determine",
-            answers: [
-                "Belirlemek",
-                "Kaçmak",
-                "Kapatmak",
-                "Paylaşmak"
-            ],
-            correct: "Belirlemek"
-        }
-    ],
-    hard: [
-        {
-            word: "Ambiguous",
-            answers: [
-                "Belirsiz",
-                "Tehlikeli",
-                "Gereksiz",
-                "Kesin"
-            ],
-            correct: "Belirsiz"
-        },
-        {
-            word: "Nevertheless",
-            answers: [
-                "Bu nedenle",
-                "Bununla birlikte",
-                "Örneğin",
-                "Sonuç olarak"
-            ],
-            correct: "Bununla birlikte"
-        },
-        {
-            word: "Reluctant",
-            answers: [
-                "İsteksiz",
-                "Kararlı",
-                "Meraklı",
-                "Cesur"
-            ],
-            correct: "İsteksiz"
-        },
-        {
-            word: "Substantial",
-            answers: [
-                "Önemsiz",
-                "Önemli ölçüde",
-                "Geçici",
-                "Gizli"
-            ],
-            correct: "Önemli ölçüde"
-        },
-        {
-            word: "Inevitable",
-            answers: [
-                "Kaçınılmaz",
-                "İmkânsız",
-                "Geçici",
-                "Şüpheli"
-            ],
-            correct: "Kaçınılmaz"
-        },
-        {
-            word: "Controversial",
-            answers: [
-                "Tartışmalı",
-                "Kesin",
-                "Geleneksel",
-                "Basit"
-            ],
-            correct: "Tartışmalı"
-        },
-        {
-            word: "Meticulous",
-            answers: [
-                "Dikkatsiz",
-                "Titiz",
-                "Kızgın",
-                "Şaşkın"
-            ],
-            correct: "Titiz"
-        },
-        {
-            word: "Convey",
-            answers: [
-                "İletmek",
-                "Gizlemek",
-                "Reddetmek",
-                "Unutmak"
-            ],
-            correct: "İletmek"
-        },
-        {
-            word: "Predominantly",
-            answers: [
-                "Tamamen",
-                "Büyük ölçüde",
-                "Nadiren",
-                "Kesinlikle"
-            ],
-            correct: "Büyük ölçüde"
-        },
-        {
-            word: "Deteriorate",
-            answers: [
-                "İyileşmek",
-                "Kötüleşmek",
-                "Değiştirmek",
-                "Başlamak"
-            ],
-            correct: "Kötüleşmek"
-        }
-    ]
-};
-let selectedLevel = "";
-let currentQuestion = 0;
+
+let level = "easy";
+let words = [];
+let current = 0;
 let score = 0;
 let answered = false;
-function setLevel(level, button) {
-    selectedLevel = level;
-    currentQuestion = 0;
-    score = 0;
-    document
-        .querySelectorAll(".level-btn")
-        .forEach(btn => {
-            btn.classList.remove("active");
-        });
-    button.classList.add("active");
-    document
-        .getElementById("levelScreen")
-        .classList
-        .add("hidden");
-    document
-        .getElementById("quiz")
-        .classList
-        .remove("hidden");
-    loadQuestion();
-}
-function loadQuestion() {
-    answered = false;
-    document
-        .getElementById("nextBtn")
-        .classList
-        .add("hidden");
-    document
-        .getElementById("feedback")
-        .textContent = "";
-    const q =
-        words[selectedLevel][currentQuestion];
-    document
-        .getElementById("questionNumber")
-        .textContent =
-        `Soru ${currentQuestion + 1} / 10`;
-    document
-        .getElementById("scoreText")
-        .textContent =
-        `Skor: ${score}`;
-    document
-        .getElementById("progress")
-        .style.width =
-        `${(currentQuestion / 10) * 100}%`;
-    document
-        .getElementById("word")
-        .textContent =
-        q.word;
-    const answers =
-        document.getElementById("answers");
-    answers.innerHTML = "";
-    q.answers.forEach(answer => {
-        const button =
-            document.createElement("button");
-        button.textContent =
-            answer;
-        button.classList.add("answer");
-        button.onclick =
-            () => checkAnswer(button, answer);
-        answers.appendChild(button);
-    });
-}
-function checkAnswer(button, answer) {
-    if (answered) return;
-    answered = true;
-    const q =
-        words[selectedLevel][currentQuestion];
-    document
-        .querySelectorAll(".answer")
-        .forEach(btn => {
-            if (
-                btn.textContent === q.correct
-            ) {
-                btn.classList.add("correct");
-            }
-        });
-    if (answer === q.correct) {
-        score++;
-        button.classList.add("correct");
-        document
-            .getElementById("feedback")
-            .textContent =
-            "✅ Doğru!";
-    } else {
-        button.classList.add("wrong");
-        document
-            .getElementById("feedback")
-            .textContent =
-            `❌ Yanlış! Doğru cevap: ${q.correct}`;
+
+
+/* KELİMELERİ KARIŞTIR */
+
+function shuffle(array) {
+
+    const result = [...array];
+
+    for (let i = result.length - 1; i > 0; i--) {
+
+        const j =
+            Math.floor(Math.random() * (i + 1));
+
+        [result[i], result[j]] =
+            [result[j], result[i]];
     }
-    document
-        .getElementById("scoreText")
-        .textContent =
-        `Skor: ${score}`;
-    document
-        .getElementById("nextBtn")
-        .classList
-        .remove("hidden");
+
+    return result;
 }
-function nextQuestion() {
-    currentQuestion++;
-    if (currentQuestion >= 10) {
-        showResult();
-    } else {
-        loadQuestion();
+
+
+/* DAHA ÖNCE GÖRÜLEN KELİMELER */
+
+function getSeenWords() {
+
+    const saved =
+        localStorage.getItem(
+            "englishSeen_" + level
+        );
+
+    if (!saved) return [];
+
+    try {
+        return JSON.parse(saved);
+    } catch {
+        return [];
     }
 }
-function showResult() {
-    document
-        .getElementById("quiz")
-        .classList
-        .add("hidden");
-    document
-        .getElementById("result")
-        .classList
-        .remove("hidden");
-    document
-        .getElementById("finalScore")
-        .textContent =
-        `${score} / 10`;
-    let message = "";
-    if (score === 10) {
-        message =
-            "🔥 Mükemmel! Hepsini bildin!";
-    } else if (score >= 8) {
-        message =
-            "🏆 Çok iyi! İngilizcen sağlam.";
-    } else if (score >= 6) {
-        message =
-            "👏 Güzel skor!";
-    } else if (score >= 4) {
-        message =
-            "🙂 Fena değil! Biraz daha pratik yap.";
-    } else {
-        message =
-            "😄 Bir tur daha dene!";
-    }
-    document
-        .getElementById("message")
-        .textContent =
-        message;
-    const storageKey =
-        "englishHighScore_" +
-        selectedLevel;
-    let highScore =
-        Number(
-            localStorage.getItem(storageKey)
-        ) || 0;
-    if (score > highScore) {
-        highScore = score;
+
+
+/* KELİMEYİ GÖRÜLDÜ OLARAK KAYDET */
+
+function markAsSeen(word) {
+
+    const seen = getSeenWords();
+
+    if (!seen.includes(word)) {
+
+        seen.push(word);
+
         localStorage.setItem(
-            storageKey,
-            highScore
+            "englishSeen_" + level,
+            JSON.stringify(seen)
         );
     }
-    document
-        .getElementById("highScore")
+}
+
+
+/* YENİ TUR OLUŞTUR */
+
+function createRound() {
+
+    const allWords =
+        englishWords[level];
+
+    let seen =
+        getSeenWords();
+
+
+    let available =
+        allWords.filter(word =>
+            !seen.includes(word[0])
+        );
+
+
+    /*
+       Yeterli yeni kelime varsa
+       sadece daha önce görülmeyenlerden seç.
+    */
+
+    if (available.length >= 10) {
+
+        words =
+            shuffle(available).slice(0, 10);
+
+    } else if (available.length > 0) {
+
+        /*
+           Son kalan kelimeleri kullan.
+        */
+
+        words =
+            shuffle(available);
+
+    } else {
+
+        /*
+           Bu seviyedeki bütün kelimeler
+           tüketildiyse yeni döngü başlat.
+        */
+
+        localStorage.removeItem(
+            "englishSeen_" + level
+        );
+
+        words =
+            shuffle([...allWords]).slice(0, 10);
+    }
+
+
+    /*
+       Seçilen kelimeleri kaydet.
+    */
+
+    words.forEach(word =>
+        markAsSeen(word[0])
+    );
+
+
+    updateRemaining();
+}
+
+
+/* KALAN KELİME SAYISI */
+
+function updateRemaining() {
+
+    const total =
+        englishWords[level].length;
+
+    const seen =
+        getSeenWords().length;
+
+    const remaining =
+        Math.max(0, total - seen);
+
+    document.getElementById("remaining")
         .textContent =
-        highScore;
+        `Bu seviyede daha önce görülmemiş ${remaining} kelime kaldı.`;
 }
-function restartQuiz() {
-    currentQuestion = 0;
-    score = 0;
-    document
-        .getElementById("result")
-        .classList
-        .add("hidden");
-    document
-        .getElementById("levelScreen")
-        .classList
-        .remove("hidden");
-    document
-        .querySelectorAll(".level-btn")
-        .forEach(btn => {
-            btn.classList.remove("active");
-        });
-}
-</script>
-</body>
-</html>
+
+
+/* KELİMEYİ GÖSTER */
+
+function loadWord() {
+
+    answered = false;
+
+    const currentWord =
+        words[current];
+
+    document.getElementById("word")
+        .textContent =
+        currentWord[0];
+
+    document.getElementById("progress")
+        .textContent =
+        `Soru ${current + 1} / ${words.length}`;
+
+    document.getElementById("answerInput")
+        .value = "";
+
+    document.getElementById("answerInput")
+        .disabled = false;
+
+    document.getElementById("feedback")
+        .textContent = "";
+
+    document.getElementById("nextBtn")
+        .style.display = "none";
+
+    document.getElementById("answerInput")
+        .focus
+```

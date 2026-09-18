@@ -1,0 +1,72 @@
+```javascript
+const englishWords = {
+    easy: [
+        ["apple", "elma"],
+        ["book", "kitap"],
+        ["house", "ev"],
+        ["water", "su"],
+        ["school", "okul"],
+        ["friend", "arkadaş"],
+        ["car", "araba"],
+        ["dog", "köpek"],
+        ["cat", "kedi"],
+        ["food", "yemek"],
+        ["family", "aile"],
+        ["happy", "mutlu"],
+        ["small", "küçük"],
+        ["big", "büyük"],
+        ["fast", "hızlı"],
+        ["slow", "yavaş"],
+        ["night", "gece"],
+        ["morning", "sabah"],
+        ["beautiful", "güzel"],
+        ["strong", "güçlü"]
+    ],
+
+    medium: [
+        ["achieve", "başarmak"],
+        ["ancient", "antik"],
+        ["attempt", "girişim"],
+        ["challenge", "meydan okuma"],
+        ["decision", "karar"],
+        ["discover", "keşfetmek"],
+        ["environment", "çevre"],
+        ["improve", "geliştirmek"],
+        ["knowledge", "bilgi"],
+        ["necessary", "gerekli"],
+        ["opportunity", "fırsat"],
+        ["prevent", "önlemek"],
+        ["require", "gerektirmek"],
+        ["solution", "çözüm"],
+        ["support", "desteklemek"],
+        ["valuable", "değerli"],
+        ["increase", "artırmak"],
+        ["reduce", "azaltmak"],
+        ["develop", "geliştirmek"],
+        ["compare", "karşılaştırmak"]
+    ],
+
+    hard: [
+        ["ambiguous", "belirsiz"],
+        ["consecutive", "ardışık"],
+        ["controversial", "tartışmalı"],
+        ["deteriorate", "kötüleşmek"],
+        ["elaborate", "ayrıntılı"],
+        ["inevitable", "kaçınılmaz"],
+        ["meticulous", "titiz"],
+        ["perspective", "bakış açısı"],
+        ["profound", "derin"],
+        ["reluctant", "isteksiz"],
+        ["substantial", "önemli"],
+        ["unprecedented", "eşi benzeri görülmemiş"],
+        ["vulnerable", "savunmasız"],
+        ["coherent", "tutarlı"],
+        ["contemplate", "üzerinde düşünmek"],
+        ["discrepancy", "uyuşmazlık"],
+        ["exaggerate", "abartmak"],
+        ["inefficient", "verimsiz"],
+        ["sophisticated", "gelişmiş"],
+        ["versatile", "çok yönlü"]
+    ]
+};
+```
